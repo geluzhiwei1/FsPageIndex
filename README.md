@@ -62,13 +62,50 @@ It simulates how *human experts* navigate and extract knowledge from complex doc
   </a>
 </div>
 
-### 🎯 Core Features 
+### 🎯 Core Features
 
 Compared to traditional vector-based RAG, **PageIndex** features:
 - **No Vector DB**: Uses document structure and LLM reasoning for retrieval, instead of vector similarity search.
 - **No Chunking**: Documents are organized into natural sections, not artificial chunks.
 - **Human-like Retrieval**: Simulates how human experts navigate and extract knowledge from complex documents.
-- **Better Explainability and Traceability**: Retrieval is based on reasoning — traceable and interpretable, with page and section references. No more opaque, approximate vector search (“vibe retrieval”).
+- **Better Explainability and Traceability**: Retrieval is based on reasoning — traceable and interpretable, with page and section references. No more opaque, approximate vector search ("vibe retrieval").
+
+### 🚀 New: FsPageIndex - File System Indexing
+
+**FsPageIndex** extends PageIndex from single documents to **entire file system management** with intelligent search across multiple file types.
+
+**Key Features**:
+- **Multi-Path Indexing**: Index multiple directories simultaneously
+- **Incremental Updates**: Detect and reindex only changed files (90%+ faster)
+- **26+ File Types**: PDF, Markdown, Python, JavaScript, TypeScript, JSON, YAML, CSV, logs, images, videos, and more
+- **AI-Powered Media Processing**: VLM analysis and OCR for images/videos (requires OpenAI API)
+- **Advanced Search**: Metadata filtering, relevance ranking, pagination
+- **Three-Level Caching**: L1 memory, L2 disk, result cache for <1ms search
+- **REST API & CLI**: Both HTTP API and command-line interface
+
+**Media Processing** (NEW):
+- 📸 **Image Analysis**: AI content description, OCR text extraction, EXIF metadata
+- 🎬 **Video Processing**: Frame extraction, AI scene analysis, video information
+- 🤖 **VLM Support**: GPT-4o for intelligent content understanding
+- 🔍 **Search by Content**: Find images/videos by visual content, not just filenames
+
+**Quick Start**:
+```bash
+# Index a directory with media processing
+python3 run_fsindex.py index ~/Documents
+
+# Search across all indexed files
+python3 run_fsindex.py search "machine learning"
+
+# Index images with AI analysis
+export OPENAI_API_KEY=your_key
+python3 run_fsindex.py index ~/Pictures
+
+# Search by image content
+python3 run_fsindex.py search "sunset beach"
+```
+
+See [docs/](docs/) for complete FsPageIndex documentation.
 
 PageIndex powers a reasoning-based RAG system that achieved **state-of-the-art** [98.7% accuracy](https://github.com/VectifyAI/Mafin2.5-FinanceBench) on FinanceBench, demonstrating superior performance over vector-based RAG solutions in professional document analysis (see our [blog post](https://vectify.ai/blog/Mafin2.5) for details).
 
@@ -139,6 +176,8 @@ You can generate the PageIndex tree structure with this open-source repo, or use
 
 # ⚙️ Package Usage
 
+## Option 1: PageIndex (Single Document)
+
 You can follow these steps to generate a PageIndex tree from a PDF document.
 
 ### 1. Install dependencies
@@ -189,6 +228,68 @@ python3 run_pageindex.py --md_path /path/to/your/document.md
 > Note: in this function, we use "#" to determine node heading and their levels. For example, "##" is level 2, "###" is level 3, etc. Make sure your markdown file is formatted correctly. If your Markdown file was converted from a PDF or HTML, we don't recommend using this function, since most existing conversion tools cannot preserve the original hierarchy. Instead, use our [PageIndex OCR](https://pageindex.ai/blog/ocr), which is designed to preserve the original hierarchy, to convert the PDF to a markdown file and then use this function.
 </details>
 
+## Option 2: FsPageIndex (File System)
+
+For indexing entire directories with multiple file types, use FsPageIndex:
+
+### 1. Install additional dependencies (optional)
+
+For media processing support (images/videos):
+
+```bash
+pip3 install pillow opencv-python
+```
+
+### 2. Set API key for media processing (optional)
+
+```bash
+export OPENAI_API_KEY=your_openai_key_here
+```
+
+### 3. Index a directory
+
+```bash
+# Index documents (PDF, MD, code, text files)
+python3 run_fsindex.py index ~/Documents
+
+# Index images with AI analysis
+python3 run_fsindex.py index ~/Pictures
+
+# Index videos with frame analysis
+python3 run_fsindex.py index ~/Videos
+```
+
+### 4. Search across indexed files
+
+```bash
+# Search by content
+python3 run_fsindex.py search "machine learning"
+
+# Search by image content
+python3 run_fsindex.py search "sunset beach"
+
+# Search by file type
+python3 run_fsindex.py search "python" --types py
+
+# Search with filters
+python3 run_fsindex.py search "api" --file-types pdf,md --limit 10
+```
+
+### 5. Manage index
+
+```bash
+# View statistics
+python3 run_fsindex.py stats
+
+# Incremental update (only changed files)
+python3 run_fsindex.py index --incremental
+
+# Clear cache
+python3 run_fsindex.py cache clear
+```
+
+For complete FsPageIndex documentation, see [docs/](docs/).
+
 <!-- 
 # ☁️ Improved Tree Generation with PageIndex OCR
 
@@ -224,6 +325,14 @@ Explore the full [benchmark results](https://github.com/VectifyAI/Mafin2.5-Finan
 
 # 🧭 Resources
 
+**FsPageIndex Documentation**:
+* 📚 [Docs Index](docs/): Complete FsPageIndex documentation hub
+* 🚀 [Quick Start](docs/quick-start/QUICKSTART.md): Get started in 5 minutes
+* 📸 [Media Processing](docs/features/ENHANCED_MEDIA_PROCESSING.md): AI-powered image/video analysis
+* 🔍 [File Types](docs/features/SUPPORTED_FILE_TYPES.md): All 26+ file types explained
+* 🔄 [Migration Guide](docs/usage/MIGRATION_GUIDE.md): Migrate from PageIndex to FsPageIndex
+
+**PageIndex Resources**:
 * 🧪 [Cookbooks](https://docs.pageindex.ai/cookbook/vectorless-rag-pageindex): hands-on, runnable examples and advanced use cases.
 * 📖 [Tutorials](https://docs.pageindex.ai/doc-search): practical guides and strategies, including *Document Search* and *Tree Search*.
 * 📝 [Blog](https://pageindex.ai/blog): technical articles, research insights, and product updates.

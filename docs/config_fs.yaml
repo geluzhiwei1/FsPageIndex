@@ -1,0 +1,101 @@
+# FsPageIndex Configuration File
+# This file configures the file system indexing behavior
+
+# Model Configuration
+model: "gpt-4o-2024-11-20"
+
+# Indexing Paths
+# You can specify multiple paths to index
+# paths:
+#   - /home/user/documents
+#   - /home/user/projects
+#   - /home/user/code
+
+# File Type Filtering
+# Specify which file types to include/exclude
+include_types:
+  - pdf
+  - md
+  - markdown
+  - py
+  - js
+  - ts
+  - jsx
+  - tsx
+  - txt
+  - json
+  - yaml
+  - yml
+  - xml
+  - html
+  - css
+
+# Exclude Patterns
+# Files/directories matching these patterns will be excluded
+exclude_patterns:
+  - node_modules/
+  - __pycache__/
+  - .git/
+  - .svn/
+  - .hg/
+  - venv/
+  - env/
+  - .env/
+  - dist/
+  - build/
+  - "*.min.js"
+  - "*.min.css"
+  - "*.pyc"
+  - .DS_Store
+  - Thumbs.db
+
+# Incremental Indexing
+# Enable automatic change detection and incremental updates
+incremental: true
+check_interval: 300  # seconds (5 minutes)
+
+# Performance Configuration
+max_workers: 4  # Number of parallel workers for indexing
+batch_size: 10  # Number of files to process in each batch
+
+# PDF Processing
+toc_check_page_num: 20  # Number of pages to check for TOC
+max_page_num_each_node: 10  # Max pages per tree node
+max_token_num_each_node: 20000  # Max tokens per tree node
+
+# Markdown Processing
+thinning_threshold: 5000  # Minimum tokens for tree thinning
+summary_token_threshold: 200  # Token threshold for generating summaries
+
+# Cache Configuration
+cache_enabled: true
+cache_ttl: 300  # L1 cache TTL in seconds (5 minutes)
+l1_cache_size: 100  # L1 cache capacity (number of items)
+l2_cache_backend: "sqlite"  # L2 cache backend: sqlite or redis
+cache_dir: "./cache"  # L2 cache directory
+
+# Search Configuration
+search_limit_default: 20  # Default number of search results
+search_limit_max: 100  # Maximum number of search results
+result_cache_enabled: true  # Cache search results
+
+# Media Processing Configuration (Images and Videos)
+# These features require OpenAI API key (CHATGPT_API_KEY or OPENAI_API_KEY)
+enable_vlm_analysis: true  # Enable Vision Language Model analysis for images/videos
+enable_ocr_analysis: true  # Enable OCR text extraction from images
+enable_video_frame_analysis: true  # Enable frame extraction and analysis for videos
+video_analysis_frames: 3  # Number of key frames to analyze per video
+vlm_model: "gpt-4o"  # VLM model to use (gpt-4o recommended for vision)
+ocr_model: "gpt-4o"  # OCR model to use (gpt-4o has good OCR capabilities)
+
+# Media Processing Performance
+media_batch_size: 5  # Number of media files to process in parallel
+media_timeout: 60  # Timeout for media analysis (seconds)
+
+# Storage Configuration
+db_path: "./data/fsindex_metadata.db"  # Metadata database path
+tree_storage_dir: "./trees"  # Tree storage directory
+
+# Logging
+log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+log_file: "./logs/fsindex.log"  # Log file path

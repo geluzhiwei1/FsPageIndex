@@ -1,0 +1,16 @@
+# FsPageIndex Additional Requirements
+# These are in addition to the base PageIndex requirements
+
+# Web Framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# Data Validation
+pydantic>=2.5.0
+
+# Async Support
+asyncio>=3.4.3
+
+# Testing (optional)
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
